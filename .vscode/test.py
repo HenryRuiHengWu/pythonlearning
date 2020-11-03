@@ -21,7 +21,6 @@ print("version3")
 
 print("version4")
 
-print("version5")
 
 def x():
     pass
