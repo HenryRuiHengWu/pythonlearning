@@ -1,4 +1,4 @@
-#!/Users/admin/AppData/Local/Programs/Python/Python39
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 '''
 @File    :   test.py
@@ -8,7 +8,6 @@
 @Contact :   21910069@zju.edu.cn
 '''
 # Start typing your code from here
-
 
 print("Hello world!")
 for i in range(10):
@@ -28,4 +27,3 @@ def x():
 
 def y():
     pass
-
