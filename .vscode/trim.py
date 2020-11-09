@@ -9,6 +9,7 @@
 '''
 # Start typing your code from here
 
+import time, functools
 from functools import reduce
 
 ###切片的教程作业
@@ -142,20 +143,141 @@ else:
 
 
 def str2float(s):
-    pass
+    def fn(x, y):
+        return x * 10 + y
+
+    n = s.index('.')  #以.为分割
+    s1 = list(map(int, s[:n]))
+    s2 = list(map(int, s[n + 1:]))
+    return reduce(fn, s1) + reduce(fn, s2) / (10**len(s2))
 
 
 ###回数是指从左向右读和从右向左读都是一样的数，例如12321，909。请利用filter()筛选出回数
 ###主要考filter
+'''
+# 测试:
+output = filter(is_palindrome, range(1, 1000))
+print('1~1000:', list(output))
+if list(filter(is_palindrome, range(1, 200))) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33, 44, 55, 66, 77, 88, 99, 101, 111, 121, 131, 141, 151, 161, 171, 181, 191]:
+    print('测试成功!')
+else:
+    print('测试失败!')
+'''
+
+
 def is_palindrome(n):
-    pass
+    return str(n) == str(n)[::
+                            -1]  #str(n)[::-1]等同于str(n)[-1::-1]，输出结果为str(n)的逆序
+
+
+###假设我们用一组tuple表示学生名字和成绩：
+###L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+###请用sorted()对上述列表分别按名字排序：
+###排序函数sorted()
+'''
+L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+L2 = sorted(L, key=by_name)
+print(L2)
+'''
+
+
+def by_name(t):
+    return t[0]
+
+
+###再按成绩从高到低排序：
+'''
+L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+L2 = sorted(L, key=by_score)
+print(L2)
+'''
+
+
+def by_score(t):
+    return -t[1]
+
+
+###利用闭包返回一个计数器函数，每次调用它返回递增整数：
+###返回函数
+'''
+# 测试:
+counterA = createCounter()
+print(counterA(), counterA(), counterA(), counterA(), counterA()) # 1 2 3 4 5
+counterB = createCounter()
+if [counterB(), counterB(), counterB(), counterB()] == [1, 2, 3, 4]:
+    print('测试通过!')
+else:
+    print('测试失败!')
+'''
+
+
+def createCounter():
+    num = 0
+
+    def counter():
+        nonlocal num
+        num = num + 1
+        return num
+
+    return counter
+
+
+###匿名函数
+###请用匿名函数改造下面的代码：
+'''
+def is_odd(n):
+    return n % 2 == 1
+
+L = list(filter(is_odd, range(1, 20)))
+
+'''
+#L = list(filter(lambda n: n % 2 == 1, range(1, 20)))
+
+###装饰器
+###请设计一个decorator，它可作用于任何函数上，并打印该函数的执行时间：
+'''
+# 测试
+f = fast(11, 22)
+s = slow(11, 22, 33)
+if f != 33:
+    print('测试失败!')
+elif s != 7986:
+    print('测试失败!')
+    
+'''
+
+
+def metric(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kw):
+        start = time.time()
+        res = fn(*args, **kw)
+        end = time.time()
+        print('%s executed in %s ms' % (fn.__name__, end-start))
+        return res
+    return wrapper
+    
+
+@metric
+def fast(x, y):
+    time.sleep(0.0012)
+    return x + y;
+
+@metric
+def slow(x, y, z):
+    time.sleep(0.1234)
+    return x * y * z;
+
 
 
 def main():
-    print('3 * 5 * 7 * 9 =', prod([3, 5, 7, 9]))
-    if prod([3, 5, 7, 9]) == 945:
-        print('测试成功!')
-    else:
+
+    # 测试
+    f = fast(11, 22)
+    s = slow(11, 22, 33)
+    if f != 33:
+        print('测试失败!')
+    elif s != 7986:
         print('测试失败!')
 
 
