@@ -11,6 +11,7 @@
 
 import time, functools
 from functools import reduce
+from enum import Enum, unique
 
 ###切片的教程作业
 ###利用切片操作，实现一个trim()函数，去除字符串首尾的空格，注意不要调用str的strip()方法
@@ -269,15 +270,130 @@ def slow(x, y, z):
     return x * y * z;
 
 
+###类的访问限制
+###请把下面的Student对象的gender字段对外隐藏起来，用get_gender()和set_gender()代替，并检查参数有效性：
+class Student(object):
+    def __init__(self, name, gender):
+        self.name = name
+        self.__gender = gender
+
+    def get_gender(self):
+        return self.__gender
+    
+    def set_gender(self,gender):
+        self.__gender = gender
+
+'''
+# 测试:
+bart = Student('Bart', 'male')
+if bart.get_gender() != 'male':
+    print('测试失败!')
+else:
+    bart.set_gender('female')
+    if bart.get_gender() != 'female':
+        print('测试失败!')
+    else:
+        print('测试成功!')
+'''
+
+
+###类属性和实例属性
+#为了统计学生人数，可以给Student类增加一个类属性，每创建一个实例，该属性自动增加：
+
+'''
+# 测试:
+if Student_2.count != 0:
+    print('测试失败!')
+else:
+    bart = Student_2('Bart')
+    if Student_2.count != 1:
+        print('测试失败!')
+    else:
+        lisa = Student_2('Bart')
+        if Student_2.count != 2:
+            print('测试失败!')
+        else:
+            print('Students:', Student_2.count)
+            print('测试通过!')
+'''
+
+class Student_2(object):
+    count = 0
+
+    def __init__(self, name):
+        self.name = name
+        Student_2.count = Student_2.count + 1
+
+
+###面向对象高级编程使用@property
+#请利用@property给一个Screen对象加上width和height属性，以及一个只读属性resolution：
+
+'''
+# 测试:
+s = Screen()
+s.width = 1024
+s.height = 768
+print('resolution =', s.resolution)
+if s.resolution == 786432:
+    print('测试通过!')
+else:
+    print('测试失败!')
+'''
+
+class Screen(object):
+    
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        self._width = value
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        
+        
+    @property
+    def resolution(self):
+        return self.height * self.width
+
+
+###枚举类
+#把Student的gender属性改造为枚举类型，可以避免使用字符串：
+
+'''
+# 测试:
+bart = Student_3('Bart', Gender.Male)
+if bart.gender == Gender.Male:
+    print('测试通过!')
+else:
+    print('测试失败!')
+'''
+
+@unique
+class Gender(Enum):
+    Male = 0
+    Female = 1
+
+class Student_3(object):
+    def __init__(self, name, gender):
+        self.name = name
+        self.gender = gender
+
 
 def main():
 
-    # 测试
-    f = fast(11, 22)
-    s = slow(11, 22, 33)
-    if f != 33:
-        print('测试失败!')
-    elif s != 7986:
+    # 测试:
+    bart = Student_3('Bart', Gender.Male)
+    if bart.gender == Gender.Male:
+        print('测试通过!')
+    else:
         print('测试失败!')
 
 
